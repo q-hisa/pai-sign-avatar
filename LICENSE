@@ -1,0 +1,14 @@
+All rights reserved.
+
+This repository is published to document and evaluate a course final assignment
+(Physical AI Applied Course 1). Reading the code, and running it locally to check
+how it works, is permitted. Copying, modifying, redistributing, or using it in a
+product or service requires the author's permission.
+
+Third-party components keep their own licenses and are not covered by this notice:
+- MuJoCo and MuJoCo Menagerie (Shadow Hand): Apache License 2.0 (Google DeepMind)
+- MediaPipe and its models: Apache License 2.0 (Google)
+- three.js (MIT) and @pixiv/three-vrm (MIT)
+- Face/hair model VRM1_Constraint_Twist_Sample: (c) 2022 pixiv Inc., VRM license
+  https://vrm.dev/licenses/1.0/ (downloaded by scripts/fetch_models.sh; not included here)
+- ROS 2 Humble: Apache License 2.0 (Open Robotics)

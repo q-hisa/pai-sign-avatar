@@ -1,0 +1,24 @@
+# 取得するもの・生成するもの（リポジトリに含めない）
+models/*
+!models/avatar/
+data/
+outputs/
+android_v2/data/
+android_v2/outputs/
+android_v2/mujoco_menagerie/
+android_v2/pipeline/node_modules/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+MUJOCO_LOG.TXT
+# 手話の元動画と、そこから作る動画・映像は置かない（顔が映るため）
+*.mp4
+*.mpg
+*.mov
+*.avi
+
+.public_export

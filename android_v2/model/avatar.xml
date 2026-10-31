@@ -1,0 +1,117 @@
+<!-- 手話アバター: 上半身ロボット（頭・胴・両腕＋Shadow Hand×2）。
+     座標: z上向き、アバターは +y を向く（右腕は +x 側）。
+     手の取り付け向き: 腕を下ろした状態で指が下、手のひらが体の内側、親指が前。
+     腕は片側 肩3自由度＋肘1＋前腕ひねり1、手首以降はShadow Handのモデルを使う。
+     運動学的な再生が目的なので重力は切っている。 -->
+<mujoco model="sign_avatar">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.002" gravity="0 0 0" cone="elliptic" impratio="10"/>
+  <visual>
+    <global offwidth="960" offheight="720"/>
+    <headlight ambient="0.45 0.45 0.45" diffuse="0.6 0.6 0.6"/>
+  </visual>
+  <asset>
+    <model name="rhand" file="../mujoco_menagerie/shadow_hand/right_hand.xml"/>
+    <model name="lhand" file="../mujoco_menagerie/shadow_hand/left_hand.xml"/>
+    <material name="body" rgba="0.35 0.45 0.65 1"/>
+    <material name="skin" rgba="0.85 0.7 0.6 1"/>
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.2 0.22 0.25" rgb2="0.25 0.27 0.3" width="300" height="300"/>
+    <material name="floor" texture="grid" texrepeat="6 6" reflectance="0.1"/>
+  </asset>
+  <default>
+    <joint damping="0.5" armature="0.01"/>
+    <position kp="40" kv="4" forcerange="-60 60"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 2 3" dir="0 -0.5 -1" diffuse="0.5 0.5 0.5"/>
+    <geom type="plane" size="3 3 0.1" material="floor" pos="0 0 0"/>
+
+    <body name="torso" pos="0 0 1.05">
+      <geom type="box" size="0.2 0.1 0.27" material="body"/>
+      <geom type="capsule" fromto="0 0 0.27 0 0 0.36" size="0.045" material="skin"/>
+      <body name="head" pos="0 0 0.50">
+        <joint name="neck_yaw" axis="0 0 1" range="-1.2 1.2"/>
+        <joint name="neck_pitch" axis="1 0 0" range="-0.6 0.6"/>
+        <joint name="neck_roll" axis="0 1 0" range="-0.5 0.5"/>
+        <geom type="sphere" size="0.11" material="skin"/>
+        <geom type="box" size="0.03 0.012 0.012" pos="0 0.105 0.0" rgba="0.2 0.2 0.2 1"/>  <!-- 向きの目印(鼻) -->
+        <!-- 顔: 目(視線)、まぶた、眉、口 -->
+        <body name="eye_l" pos="-0.04 0.09 0.03">
+          <joint name="eye_l_yaw" axis="0 0 1" range="-0.6 0.6"/>
+          <joint name="eye_l_pitch" axis="1 0 0" range="-0.5 0.5"/>
+          <geom type="sphere" size="0.016" rgba="0.97 0.97 0.97 1" contype="0" conaffinity="0"/>
+          <geom type="sphere" size="0.008" pos="0 0.012 0" rgba="0.08 0.08 0.1 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="lid_l" pos="-0.04 0.09 0.03">
+          <joint name="lid_l" type="slide" axis="0 1 0" range="-0.03 0"/>
+          <geom type="sphere" size="0.0175" material="skin" contype="0" conaffinity="0"/>
+        </body>
+        <body name="brow_l" pos="-0.04 0.1 0.07">
+          <joint name="brow_l" type="slide" axis="0 0 1" range="-0.02 0.03"/>
+          <geom type="box" size="0.022 0.006 0.005" rgba="0.15 0.1 0.08 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="eye_r" pos="0.04 0.09 0.03">
+          <joint name="eye_r_yaw" axis="0 0 1" range="-0.6 0.6"/>
+          <joint name="eye_r_pitch" axis="1 0 0" range="-0.5 0.5"/>
+          <geom type="sphere" size="0.016" rgba="0.97 0.97 0.97 1" contype="0" conaffinity="0"/>
+          <geom type="sphere" size="0.008" pos="0 0.012 0" rgba="0.08 0.08 0.1 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="lid_r" pos="0.04 0.09 0.03">
+          <joint name="lid_r" type="slide" axis="0 1 0" range="-0.03 0"/>
+          <geom type="sphere" size="0.0175" material="skin" contype="0" conaffinity="0"/>
+        </body>
+        <body name="brow_r" pos="0.04 0.1 0.07">
+          <joint name="brow_r" type="slide" axis="0 0 1" range="-0.02 0.03"/>
+          <geom type="box" size="0.022 0.006 0.005" rgba="0.15 0.1 0.08 1" contype="0" conaffinity="0"/>
+        </body>
+        <geom type="box" size="0.02 0.004 0.003" pos="0 0.098 -0.045" rgba="0.5 0.15 0.15 1" contype="0" conaffinity="0"/>
+        <body name="jaw" pos="0 0.098 -0.055">
+          <joint name="jaw" type="slide" axis="0 0 1" range="-0.04 0"/>
+          <geom type="box" size="0.02 0.004 0.003" rgba="0.5 0.15 0.15 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="corner_l" pos="-0.026 0.096 -0.05">
+          <joint name="corner_l_x" type="slide" axis="-1 0 0" range="-0.015 0.015"/>
+          <joint name="corner_l_z" type="slide" axis="0 0 1" range="-0.02 0.02"/>
+          <geom type="sphere" size="0.005" rgba="0.5 0.15 0.15 1" contype="0" conaffinity="0"/>
+        </body>
+        <body name="corner_r" pos="0.026 0.096 -0.05">
+          <joint name="corner_r_x" type="slide" axis="1 0 0" range="-0.015 0.015"/>
+          <joint name="corner_r_z" type="slide" axis="0 0 1" range="-0.02 0.02"/>
+          <geom type="sphere" size="0.005" rgba="0.5 0.15 0.15 1" contype="0" conaffinity="0"/>
+        </body>
+      </body>
+
+      <!-- 右腕 (+x側) -->
+      <body name="r_shoulder" pos="0.24 0 0.22">
+        <joint name="r_sh_flex" axis="1 0 0" range="-1.5 3.1"/>
+        <joint name="r_sh_abd" axis="0 -1 0" range="-0.5 3.0"/>
+        <joint name="r_sh_rot" axis="0 0 -1" range="-1.8 1.8"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.30" size="0.04" material="body"/>
+        <body name="r_elbow" pos="0 0 -0.30">
+          <joint name="r_elbow_flex" axis="1 0 0" range="0 2.6"/>
+          <joint name="r_forearm_roll" axis="0 0 -1" range="-1.6 1.6"/>
+          <site name="r_mount" size="0.01"/>
+          <frame quat="0.000000 0.707107 0.000000 -0.707107">
+            <attach model="rhand" body="rh_forearm" prefix="R_"/>
+          </frame>
+        </body>
+      </body>
+
+      <!-- 左腕 (-x側) -->
+      <body name="l_shoulder" pos="-0.24 0 0.22">
+        <joint name="l_sh_flex" axis="1 0 0" range="-1.5 3.1"/>
+        <joint name="l_sh_abd" axis="0 1 0" range="-0.5 3.0"/>
+        <joint name="l_sh_rot" axis="0 0 1" range="-1.8 1.8"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.30" size="0.04" material="body"/>
+        <body name="l_elbow" pos="0 0 -0.30">
+          <joint name="l_elbow_flex" axis="1 0 0" range="0 2.6"/>
+          <joint name="l_forearm_roll" axis="0 0 1" range="-1.6 1.6"/>
+          <frame quat="0.707107 0.000000 0.707107 0.000000">
+            <attach model="lhand" body="lh_forearm" prefix="L_"/>
+          </frame>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

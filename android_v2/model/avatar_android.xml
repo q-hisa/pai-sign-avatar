@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="sign_avatar">
+  <compiler angle="radian" autolimits="true" />
+  <option timestep="0.002" gravity="0 0 0" cone="elliptic" impratio="10" />
+  <visual>
+    <global offwidth="960" offheight="720" />
+    <headlight ambient=".4 .4 .4" diffuse=".65 .65 .65" />
+  </visual>
+  <asset>
+    <model name="rhand" file="right_hand_visual.xml" />
+    <model name="lhand" file="left_hand_visual.xml" />
+    <material name="body" rgba=".13 .145 .17 1" specular=".35" shininess=".4" />
+    <material name="armor" rgba=".91 .94 .96 1" specular=".4" shininess=".4" />
+    <material name="dark" rgba=".13 .145 .17 1" specular=".35" shininess=".4" />
+    <material name="glass" rgba=".065 .09 .12 1" specular="0.9" shininess="0.9" />
+    <material name="blue" rgba=".055 .32 .78 1" emission=".3" />
+    <material name="skin" rgba=".13 .145 .17 1" specular=".35" shininess=".4" />
+    <texture name="sky" type="skybox" builtin="gradient" rgb1="0.97 0.97 0.99" rgb2="0.8 0.83 0.9" width="256" height="256" />
+    <texture name="grid" type="2d" builtin="checker" rgb1=".88 .91 .94" rgb2=".88 .91 .94" width="300" height="300" />
+    <material name="floor" texture="grid" texrepeat="6 6" reflectance="0.1" />
+    <mesh name="abdomen_core" file="meshes/abdomen_core.obj" smoothnormal="true" />
+    <mesh name="abdomen_panel" file="meshes/abdomen_panel.obj" smoothnormal="true" />
+    <mesh name="chest_shell" file="meshes/chest_shell.obj" smoothnormal="true" />
+    <mesh name="collar_lip" file="meshes/collar_lip.obj" smoothnormal="true" />
+    <mesh name="collar_shell" file="meshes/collar_shell.obj" smoothnormal="true" />
+    <mesh name="finger_middle" file="meshes/finger_middle.obj" smoothnormal="true" />
+    <mesh name="finger_proximal" file="meshes/finger_proximal.obj" smoothnormal="true" />
+    <mesh name="finger_tip" file="meshes/finger_tip.obj" smoothnormal="true" />
+    <mesh name="forearm_shell" file="meshes/forearm_shell.obj" smoothnormal="true" />
+    <mesh name="palm_shell" file="meshes/palm_shell.obj" smoothnormal="true" />
+    <mesh name="shoulder_shell" file="meshes/shoulder_shell.obj" smoothnormal="true" />
+    <mesh name="thumb_middle" file="meshes/thumb_middle.obj" smoothnormal="true" />
+    <mesh name="thumb_proximal" file="meshes/thumb_proximal.obj" smoothnormal="true" />
+    <mesh name="thumb_tip" file="meshes/thumb_tip.obj" smoothnormal="true" />
+    <mesh name="upper_arm_shell" file="meshes/upper_arm_shell.obj" smoothnormal="true" />
+    <mesh name="waist_shell" file="meshes/waist_shell.obj" smoothnormal="true" />
+  </asset>
+  <default>
+    <joint damping="0.5" armature="0.01" />
+    <position kp="40" kv="4" forcerange="-60 60" />
+  </default>
+  <worldbody>
+    <light pos="0 2 3" dir="0 -0.5 -1" diffuse="0.5 0.5 0.5" />
+    <geom type="plane" size="3 3 0.1" material="floor" pos="0 0 0" />
+    <body name="torso" pos="0 0 1.05">
+      <geom type="ellipsoid" size="0.15 0.095 0.07" pos="0 0 -0.24" material="armor" rgba="0 0 0 0" group="3" />
+      <geom type="ellipsoid" size="0.098 0.07 0.15" pos="0 0 -0.1" material="dark" rgba="0 0 0 0" group="3" />
+      <geom type="capsule" fromto="0 0.03 -0.17 0 0.03 -0.03" size="0.06" material="armor" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom type="box" size="0.004 0.03 0.09" pos="-0.1 0.02 -0.1" material="blue" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom type="box" size="0.004 0.03 0.09" pos="0.1 0.02 -0.1" material="blue" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom type="ellipsoid" size="0.18 0.095 0.125" pos="0 0 0.1" material="armor" rgba="0 0 0 0" group="3" />
+      <geom type="ellipsoid" size="0.058 0.05 0.055" pos="-0.06 0.05 0.075" material="armor" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom type="ellipsoid" size="0.058 0.05 0.055" pos="0.06 0.05 0.075" material="armor" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom type="ellipsoid" size="0.235 0.085 0.06" pos="0 -0.005 0.2" material="armor" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom type="box" size="0.04 0.004 0.005" pos="0 0.098 0.2" material="blue" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <geom name="physics_collar" type="cylinder" fromto="0 0 0.235 0 0 0.3" size="0.05" material="armor" rgba="0 0 0 0" group="3" />
+      <geom name="physics_collar_ring" type="cylinder" fromto="0 0 0.292 0 0 0.302" size="0.053" material="dark" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+      <body name="head" pos="0 0 0.30">
+        <joint name="neck_yaw" axis="0 0 1" range="-1.2 1.2" />
+        <joint name="neck_pitch" axis="1 0 0" range="-0.6 0.6" />
+        <joint name="neck_roll" axis="0 1 0" range="-0.5 0.5" />
+        <geom type="sphere" size="0.01" group="3" contype="0" conaffinity="0" />
+      </body>
+      <body name="r_shoulder" pos="0.24 0 0.22">
+        <joint name="r_sh_flex" axis="1 0 0" range="-1.5 3.1" />
+        <joint name="r_sh_abd" axis="0 -1 0" range="-0.5 3.0" />
+        <joint name="r_sh_rot" axis="0 0 -1" range="-1.8 1.8" />
+        <geom type="sphere" pos="0.012 0 0.01" size="0.068" material="armor" rgba="0 0 0 0" group="3" />
+        <geom type="cylinder" fromto="0.06 0 0.01 0.068 0 0.01" size="0.04" material="blue" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+        <geom type="cylinder" fromto="0.066 0 0.01 0.078 0 0.01" size="0.034" material="glass" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+        <geom type="capsule" fromto="0 0 -0.05 0 0 -0.08" size="0.04" material="dark" rgba="0 0 0 0" group="3" />
+        <geom type="capsule" fromto="0 0 -0.08 0 0 -0.25" size="0.033" material="armor" rgba="0 0 0 0" group="3" />
+        <geom type="sphere" pos="0 0 -0.30" size="0.04" material="dark" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+        <body name="r_elbow" pos="0 0 -0.30">
+          <joint name="r_elbow_flex" axis="1 0 0" range="0 2.6" />
+          <joint name="r_forearm_roll" axis="0 0 -1" range="-1.6 1.6" />
+          <site name="r_mount" size="0.01" />
+          <frame quat="0.000000 0.707107 0.000000 -0.707107">
+            <attach model="rhand" body="rh_forearm" prefix="R_" />
+          </frame>
+        </body>
+        <geom name="r_shoulder_shell" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="shoulder_shell" pos="0.008 0 .006" />
+        <geom name="r_upper_arm_shell" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="upper_arm_shell" />
+        <geom name="r_shoulder_joint" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="sphere" size=".049" />
+        <geom name="r_elbow_joint" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="sphere" size=".030" pos="0 0 -.294" />
+        <geom name="r_arm_socket" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="capsule" fromto="0 0 -.052 0 0 -.088" size=".027" />
+        <geom name="r_shoulder_light" material="blue" contype="0" conaffinity="0" mass="0" group="2" type="cylinder" fromto="0.071 0 .010 0.074 0 .010" size=".027" />
+        <geom name="r_shoulder_lens" material="glass" contype="0" conaffinity="0" mass="0" group="2" type="cylinder" fromto="0.074 0 .010 0.076 0 .010" size=".023" />
+      </body>
+      <body name="l_shoulder" pos="-0.24 0 0.22">
+        <joint name="l_sh_flex" axis="1 0 0" range="-1.5 3.1" />
+        <joint name="l_sh_abd" axis="0 1 0" range="-0.5 3.0" />
+        <joint name="l_sh_rot" axis="0 0 1" range="-1.8 1.8" />
+        <geom type="sphere" pos="-0.012 0 0.01" size="0.068" material="armor" rgba="0 0 0 0" group="3" />
+        <geom type="cylinder" fromto="-0.06 0 0.01 -0.068 0 0.01" size="0.04" material="blue" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+        <geom type="cylinder" fromto="-0.066 0 0.01 -0.078 0 0.01" size="0.034" material="glass" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+        <geom type="capsule" fromto="0 0 -0.05 0 0 -0.08" size="0.04" material="dark" rgba="0 0 0 0" group="3" />
+        <geom type="capsule" fromto="0 0 -0.08 0 0 -0.25" size="0.033" material="armor" rgba="0 0 0 0" group="3" />
+        <geom type="sphere" pos="0 0 -0.30" size="0.04" material="dark" contype="0" conaffinity="0" rgba="0 0 0 0" group="3" />
+        <body name="l_elbow" pos="0 0 -0.30">
+          <joint name="l_elbow_flex" axis="1 0 0" range="0 2.6" />
+          <joint name="l_forearm_roll" axis="0 0 1" range="-1.6 1.6" />
+          <frame quat="0.707107 0.000000 0.707107 0.000000">
+            <attach model="lhand" body="lh_forearm" prefix="L_" />
+          </frame>
+        </body>
+        <geom name="l_shoulder_shell" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="shoulder_shell" pos="-0.008 0 .006" />
+        <geom name="l_upper_arm_shell" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="upper_arm_shell" />
+        <geom name="l_shoulder_joint" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="sphere" size=".049" />
+        <geom name="l_elbow_joint" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="sphere" size=".030" pos="0 0 -.294" />
+        <geom name="l_arm_socket" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="capsule" fromto="0 0 -.052 0 0 -.088" size=".027" />
+        <geom name="l_shoulder_light" material="blue" contype="0" conaffinity="0" mass="0" group="2" type="cylinder" fromto="-0.071 0 .010 -0.074 0 .010" size=".027" />
+        <geom name="l_shoulder_lens" material="glass" contype="0" conaffinity="0" mass="0" group="2" type="cylinder" fromto="-0.074 0 .010 -0.076 0 .010" size=".023" />
+      </body>
+      <geom name="chest_shell" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="chest_shell" />
+      <geom name="abdomen_panel" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="abdomen_panel" />
+      <geom name="waist_shell" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="waist_shell" />
+      <geom name="abdomen_core" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="abdomen_core" />
+      <geom name="collar" material="armor" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="collar_shell" />
+      <geom name="collar_ring" material="dark" contype="0" conaffinity="0" mass="0" group="2" type="mesh" mesh="collar_lip" />
+      <geom name="chest_indicator" material="blue" contype="0" conaffinity="0" mass="0" group="2" type="capsule" fromto="-.032 .101 .144 .032 .101 .144" size=".0025" />
+      <geom name="waist_accent_-1" material="blue" contype="0" conaffinity="0" mass="0" group="2" type="capsule" fromto="-0.102 .046 -.192 -0.123 .047 -.060" size=".0023" />
+      <geom name="waist_accent_1" material="blue" contype="0" conaffinity="0" mass="0" group="2" type="capsule" fromto="0.102 .046 -.192 0.123 .047 -.060" size=".0023" />
+    </body>
+  </worldbody>
+</mujoco>

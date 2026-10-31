@@ -1,0 +1,97 @@
+<!-- 手話アバター: 上半身ロボット（頭・胴・両腕＋Shadow Hand×2）。
+     座標: z上向き、アバターは +y を向く（右腕は +x 側）。
+     手の取り付け向き: 腕を下ろした状態で指が下、手のひらが体の内側、親指が前。
+     腕は片側 肩3自由度＋肘1＋前腕ひねり1、手首以降はShadow Handのモデルを使う。
+     運動学的な再生が目的なので重力は切っている。 -->
+<mujoco model="sign_avatar">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.002" gravity="0 0 0" cone="elliptic" impratio="10"/>
+  <visual>
+    <global offwidth="960" offheight="720"/>
+    <headlight ambient="0.5 0.5 0.5" diffuse="0.6 0.6 0.6"/>
+  </visual>
+  <asset>
+    <model name="rhand" file="../mujoco_menagerie/shadow_hand/right_hand.xml"/>
+    <model name="lhand" file="../mujoco_menagerie/shadow_hand/left_hand.xml"/>
+    <material name="body" rgba="0.17 0.18 0.21 1" specular="0.6" shininess="0.6"/>
+    <material name="armor" rgba="0.96 0.96 0.98 1" specular="0.5" shininess="0.5"/>
+    <material name="dark" rgba="0.17 0.18 0.21 1" specular="0.6" shininess="0.6"/>
+    <material name="glass" rgba="0.08 0.09 0.12 1" specular="0.9" shininess="0.9"/>
+    <material name="blue" rgba="0.15 0.45 1 1" emission="0.9"/>
+    <material name="skin" rgba="0.17 0.18 0.21 1"/>
+    <texture name="sky" type="skybox" builtin="gradient" rgb1="0.97 0.97 0.99" rgb2="0.8 0.83 0.9" width="256" height="256"/>
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.92 0.93 0.95" rgb2="0.87 0.89 0.93" width="300" height="300"/>
+    <material name="floor" texture="grid" texrepeat="6 6" reflectance="0.1"/>
+  </asset>
+  <default>
+    <joint damping="0.5" armature="0.01"/>
+    <position kp="40" kv="4" forcerange="-60 60"/>
+  </default>
+
+  <worldbody>
+    <light pos="0 2 3" dir="0 -0.5 -1" diffuse="0.5 0.5 0.5"/>
+    <geom type="plane" size="3 3 0.1" material="floor" pos="0 0 0"/>
+
+    <body name="torso" pos="0 0 1.05">
+      <geom type="ellipsoid" size="0.15 0.095 0.07" pos="0 0 -0.24" material="armor"/>
+      <geom type="ellipsoid" size="0.098 0.07 0.15" pos="0 0 -0.1" material="dark"/>
+      <geom type="capsule" fromto="0 0.03 -0.17 0 0.03 -0.03" size="0.06" material="armor" contype="0" conaffinity="0"/>
+      <geom type="box" size="0.004 0.03 0.09" pos="-0.1 0.02 -0.1" material="blue" contype="0" conaffinity="0"/>
+      <geom type="box" size="0.004 0.03 0.09" pos="0.1 0.02 -0.1" material="blue" contype="0" conaffinity="0"/>
+      <geom type="ellipsoid" size="0.18 0.095 0.125" pos="0 0 0.1" material="armor"/>
+      <geom type="ellipsoid" size="0.058 0.05 0.055" pos="-0.06 0.05 0.075" material="armor" contype="0" conaffinity="0"/>
+      <geom type="ellipsoid" size="0.058 0.05 0.055" pos="0.06 0.05 0.075" material="armor" contype="0" conaffinity="0"/>
+      <geom type="ellipsoid" size="0.235 0.085 0.06" pos="0 -0.005 0.2" material="armor" contype="0" conaffinity="0"/>
+      <geom type="box" size="0.04 0.004 0.005" pos="0 0.098 0.2" material="blue" contype="0" conaffinity="0"/>
+      <geom name="collar" type="cylinder" fromto="0 0 0.235 0 0 0.3" size="0.05" material="armor"/>
+      <geom name="collar_ring" type="cylinder" fromto="0 0 0.292 0 0 0.302" size="0.053" material="dark" contype="0" conaffinity="0"/>
+      <body name="head" pos="0 0 0.30">
+        <joint name="neck_yaw" axis="0 0 1" range="-1.2 1.2"/>
+        <joint name="neck_pitch" axis="1 0 0" range="-0.6 0.6"/>
+        <joint name="neck_roll" axis="0 1 0" range="-0.5 0.5"/>
+        <geom type="sphere" size="0.01" group="3" contype="0" conaffinity="0"/>
+      </body>
+
+      <!-- 右腕 (+x側) -->
+      <body name="r_shoulder" pos="0.24 0 0.22">
+        <joint name="r_sh_flex" axis="1 0 0" range="-1.5 3.1"/>
+        <joint name="r_sh_abd" axis="0 -1 0" range="-0.5 3.0"/>
+        <joint name="r_sh_rot" axis="0 0 -1" range="-1.8 1.8"/>
+        <geom type="sphere" pos="0.012 0 0.01" size="0.068" material="armor"/>
+        <geom type="cylinder" fromto="0.06 0 0.01 0.068 0 0.01" size="0.04" material="blue" contype="0" conaffinity="0"/>
+        <geom type="cylinder" fromto="0.066 0 0.01 0.078 0 0.01" size="0.034" material="glass" contype="0" conaffinity="0"/>
+        <geom type="capsule" fromto="0 0 -0.05 0 0 -0.08" size="0.04" material="dark"/>
+        <geom type="capsule" fromto="0 0 -0.08 0 0 -0.25" size="0.033" material="armor"/>
+        <geom type="sphere" pos="0 0 -0.30" size="0.04" material="dark" contype="0" conaffinity="0"/>
+        <body name="r_elbow" pos="0 0 -0.30">
+          <joint name="r_elbow_flex" axis="1 0 0" range="0 2.6"/>
+          <joint name="r_forearm_roll" axis="0 0 -1" range="-1.6 1.6"/>
+          <site name="r_mount" size="0.01"/>
+          <frame quat="0.000000 0.707107 0.000000 -0.707107">
+            <attach model="rhand" body="rh_forearm" prefix="R_"/>
+          </frame>
+        </body>
+      </body>
+
+      <!-- 左腕 (-x側) -->
+      <body name="l_shoulder" pos="-0.24 0 0.22">
+        <joint name="l_sh_flex" axis="1 0 0" range="-1.5 3.1"/>
+        <joint name="l_sh_abd" axis="0 1 0" range="-0.5 3.0"/>
+        <joint name="l_sh_rot" axis="0 0 1" range="-1.8 1.8"/>
+        <geom type="sphere" pos="-0.012 0 0.01" size="0.068" material="armor"/>
+        <geom type="cylinder" fromto="-0.06 0 0.01 -0.068 0 0.01" size="0.04" material="blue" contype="0" conaffinity="0"/>
+        <geom type="cylinder" fromto="-0.066 0 0.01 -0.078 0 0.01" size="0.034" material="glass" contype="0" conaffinity="0"/>
+        <geom type="capsule" fromto="0 0 -0.05 0 0 -0.08" size="0.04" material="dark"/>
+        <geom type="capsule" fromto="0 0 -0.08 0 0 -0.25" size="0.033" material="armor"/>
+        <geom type="sphere" pos="0 0 -0.30" size="0.04" material="dark" contype="0" conaffinity="0"/>
+        <body name="l_elbow" pos="0 0 -0.30">
+          <joint name="l_elbow_flex" axis="1 0 0" range="0 2.6"/>
+          <joint name="l_forearm_roll" axis="0 0 1" range="-1.6 1.6"/>
+          <frame quat="0.707107 0.000000 0.707107 0.000000">
+            <attach model="lhand" body="lh_forearm" prefix="L_"/>
+          </frame>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

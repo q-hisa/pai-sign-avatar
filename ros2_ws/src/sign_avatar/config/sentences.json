@@ -1,0 +1,6 @@
+[
+  {"id": "demo_wave", "text": "手を振る",
+   "q": "demo/avatar_q_demo_wave.npz", "motion": "demo/motion_demo_wave.json"},
+  {"id": "demo_count", "text": "指で1、2、3を示す",
+   "q": "demo/avatar_q_demo_count.npz", "motion": "demo/motion_demo_count.json"}
+]

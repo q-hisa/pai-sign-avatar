@@ -1,0 +1,20 @@
+services:
+  dev:
+    build:
+      context: .
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    image: pai-sign-dev:latest
+    container_name: pai-sign-dev
+    working_dir: /workspace
+    volumes:
+      - .:/workspace          # このフォルダをそのままマウント（コード・動画はホストに残る）
+    environment:
+      - MUJOCO_GL=osmesa
+      - PYOPENGL_PLATFORM=osmesa
+      - PYTHONPATH=/opt/venv/lib/python3.10/site-packages   # ROS 2のノード（システムのPython）からもmujoco等を使えるように
+      - SIGN_REPO=/workspace
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}   # LLM連携用（任意。.envから読む）
+    stdin_open: true
+    tty: true

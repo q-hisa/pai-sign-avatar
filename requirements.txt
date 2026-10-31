@@ -1,0 +1,8 @@
+mujoco
+numpy<2
+scipy
+mediapipe
+mediapy
+matplotlib
+tqdm
+anthropic

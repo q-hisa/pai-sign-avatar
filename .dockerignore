@@ -1,0 +1,10 @@
+models/
+outputs/
+data/
+.git
+__pycache__
+*.pyc
+*.mp4
+*.docx
+*.xlsx
+MUJOCO_LOG.TXT
